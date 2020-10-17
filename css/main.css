@@ -1,0 +1,83 @@
+h1
+{
+    text-align: center;
+    margin: 0px;
+    border-bottom: 4px double gray;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet);
+    font-size: 50px;
+}
+
+footer
+{
+    position: absolute;
+    bottom: auto;
+}
+
+.contour
+{
+    padding: 10px;
+    border: 1px solid black;
+    border-color: black;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+}
+
+.case
+{
+    margin: 40px;
+    display: inline-block;
+    width: 50px;
+}
+
+.combi
+{
+    border: 2px solid black;
+    flex-wrap: wrap;
+    margin: 10px;
+    background-color: lightgreen;
+}
+
+.combi2
+{
+    border: 2px solid black;
+    flex-wrap: wrap;
+    margin: 10px;
+}
+
+.tout
+{
+    width: 825px;
+    
+}
+
+.boutonRadio
+{
+    width: 85px;
+    margin: 5px;
+}
+
+label
+{
+    margin: 10px;
+}
+
+#regle{
+    border: 2px solid red;
+    margin: 20px;
+    padding: 20px;
+    font-size: 18px;
+    background-color: snow;
+}
+
+body{
+    background-color: lightblue;
+}
+
+h3{
+    text-align: center;
+    border-bottom: 2px solid blue;
+    padding-bottom: 10px;
+}

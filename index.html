@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Mastermind</title>
+        <link rel="stylesheet" href="css/main.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Le Mastermind (et pas que le code)</h1>
+        </header>
+        <section>
+            <div id="regle">
+                <h3>Règles du jeu</h3>
+                <ul>
+                    <li>Vous devez cliquer sur les couleurs pour trouver la combinaison de couleurs que l'ordinateur a choisie pour vous.</li>
+                    <li>Vous devez trouver une combinaison de 4 ou 5 couleurs selon la difficulté sélectionnée.</li>
+                    <li>L'ordinateur peut sélectionner plusieurs fois une même couleur.</li>
+                    <li>Vous avez 12 tentatives pour déchiffrer la bonne combinaison. </li>
+                    <li>Si vous trouvez une couleur bien placée, l'ordinateur vous le dira, mais ne vous indiquera pas laquelle.</li>
+                    <li>Il suit un fonctionnement similaire pour les couleurs mal placées.</li>
+                    <li>À vous de faire preuve de jugeote et de logique pour vaincre le mastermind.</li>
+                </ul>
+            </div>
+            <div class="tout">
+                <script>
+                    //initialisation des div
+                    var i = 0;
+                    var j = 0, k = 0;
+                    var nomClass = "";
+                    var tableCoul = [];
+                    var dejaSelec = false;
+                    var tabCouleur = ["red", "yellow", "blue", "green", "purple", "orange"], tabChoixRan = [];
+                    var nbEssai = 12;
+                    //on demande à l'utilisateur de choisir une difficulté qui servira pour les futures boucles
+                    var difficulte = prompt("Veuillez choisir la taille de la combinaison entre 4 (normal) et 5 (difficile)");
+                    //on s'assure que l'utilisateur rentre bien 4 ou 5
+                    while (difficulte != 4 && difficulte != 5){
+                        difficulte = prompt("Veuillez entrer 4 (normal) ou 5 (difficile)");
+                    }
+                    //on set le tableau qui contiendra les couleurs de la combinaison choisies de manière aléatoire par rapport à un tableau de couleurs
+                    for (var l = 0; l < difficulte; l++){
+                        tabChoixRan[l] = tabCouleur[Math.floor(Math.random() * tabCouleur.length)];
+                    }
+                    //création du div qui contiendra les inputs du joueur
+                    document.write("<div class='combi'>");
+                    //On utilise 2 boucles. La première pour placer les cases couleurs et la deuxième pour les bouttons radio permettant de sélectionner les couleurs
+                    for(j = 0; j < difficulte; j++){
+                        var nomId = "contour" + j;
+                        document.write("<div class='case'><div class='contour' id='" + nomId + "'></div><div class='boutonRadio'>");
+                        for(k = 0; k < 6; k++){
+                            var choixId =  "choix" + j + k;
+                            var couleurSelection = "";
+                            switch (k){
+                                case 0 :{
+                                    couleurSelection = "rouge";
+                                    break;
+                                }
+                                case 1 :{
+                                    couleurSelection = "jaune";
+                                    break;
+                                }
+                                case 2:{
+                                    couleurSelection = "bleu";
+                                    break;
+                                }
+                                case 3:{
+                                    couleurSelection = "vert";
+                                    break;
+                                }
+                                case 4:{
+                                    couleurSelection = "violet";
+                                    break;
+                                }
+                                case 5:{
+                                    couleurSelection = "orange";
+                                    break;
+                                }
+                            }
+                            document.write("<input type='radio' name='" + nomId + "' onclick='enregistreCouleur(this.id, this.name)' id='" + choixId + "' value=" + couleurSelection + "><label for='choix" + choixId + "'>" + couleurSelection + "</label>");
+                                
+                        }
+                        document.write("</div></div>");
+                    }
+                    //Le bouton qui utilise la fonction verifMaster
+                    document.write("<button onclick='verifMaster()'>Test</button></div>");
+                    //}
+                    
+                    //Cette fonction affiche la couleur sélectionnée par l'utilisateur et ajoute dans un tableau la valeur enregistré en veillant à ne pas rajouter une couleur déjà sélectionné lorsque l'utilisateur clique sur le bouton radio
+                    function enregistreCouleur(idCoul, idCompt){
+                        var coul = document.getElementById(idCoul).value;
+                        var couleur = "";
+                        var idChoix = idCoul.substring(5, 6);
+                        if(document.getElementById(idCompt).style.borderColor == ""){
+                            dejaSelec = false;
+                        }
+                        switch (coul){
+                            case "rouge":{
+                                couleur = "red";
+                                break;
+                            }
+                            case "jaune":{
+                                couleur = "yellow";
+                                break;
+                            }
+                            case "bleu":{
+                                couleur = "blue";
+                                break;
+                            }
+                            case "vert":{
+                                couleur = "green";
+                                break;
+                            }
+                            case "violet":{
+                                couleur = "purple";
+                                break;
+                            }
+                            case "orange":{
+                                couleur = "orange";
+                                break;
+                            }
+                        }
+                        document.getElementById(idCompt).style.backgroundColor = couleur;
+                        document.getElementById(idCompt).style.borderColor = couleur;
+                        if(dejaSelec == false){
+                            i++;
+                        }
+                        tableCoul[idChoix] = couleur;
+                        dejaSelec = true;
+                    }
+                    
+                    
+                    //la fonction permet de vérifier la combinaison.
+                    function verifMaster(){
+                        var n = 0, m = 0;
+                        var bienPlace = 0;
+                        var present = 0;
+                        var estPresent = false;
+                        //On check si l'utilisateur a bien entré une combinaison compléte de 4 ou 5 selon la difficulté
+                        if (i < difficulte){
+                            alert("Vous devez choisir " + difficulte + " couleurs!");
+                        }else{
+                            //on vérifie les couleurs entrées
+                            for(m = 0; m < tabChoixRan.length; m++){
+                                if(tabChoixRan[m] == tableCoul[m]){
+                                    bienPlace++;
+                                }else{
+                                    for (n = 0; n < tabChoixRan.length; n++){
+                                        if ((tabChoixRan[m] == tableCoul[n]) && (m != n)){
+                                            estPresent = true;
+                                            console.log(tabChoixRan[m]);
+                                            console.log(tableCoul[n]);
+                                        }
+                                    }
+                                    if(estPresent){
+                                        present++;
+                                        estPresent = false;
+                                    }
+                                }
+                            }
+                            //si la combinaison est bonne à 100%, l'utilisateur gagne
+                            if(bienPlace == difficulte){
+                                alert("Vous avez gagné.");
+                            }else{
+                                //Si la combinaison est fausse, il réessaye en ayant des indices par rapport aux couleurs bien placées ou présentes 
+                                nbEssai--;
+                                if(nbEssai <= 0){
+                                    alert("Vous avez perdu.")
+                                    for(j = 0; j < tabChoixRan.length; j++){
+                                        $( ".tout" ).append("<div class='contour' style='border: 2px solid black; background-color:"+tabChoixRan[j]+   ";'></div>");
+                                    }
+                                    $( ".tout" ).append("<p>Voici la bonne combinaison./>");
+                                }else{
+                                    alert("Ce n'est pas la bonne combinaison. Il vous reste "+nbEssai+" tentative(s).");
+                                    for(j = 0; j < tabChoixRan.length; j++){
+                                        $( ".tout" ).append("<div class='contour' style='border: 2px solid black;background-color:"+tableCoul[j]+";'></div>");
+                                        console.log(tableCoul[j]);
+                                    }
+                                    $( ".tout" ).append("<p>Vous avez trouvé "+bienPlace+" couleur(s) bien placée(s) et "+present+" couleur(s) mal placées.</p>");
+                                }
+                            }
+                        }
+                    }
+                </script>
+            </div>    
+        </section>
+        <footer>
+            Stéphane Wilhelm Ludus Académie
+        </footer>
+    </body>
+</html>
